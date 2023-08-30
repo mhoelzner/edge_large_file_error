@@ -1,56 +1,30 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-  loadFile('./largefile.txt', function(text) {
+  loadFileXhr('./largefile.txt', function(text) {
     console.log(text.length);
-    document.writeln(text.length);
+    document.body.innerHTML += '<p>' + text.length + '</p>';
   } );
   loadFileFetch('./largeFile.txt', function(text) {
     console.log(text.length);
-    document.writeln(text.length);
+    document.body.innerHTML += '<p>' + text.length + '</p>';
   });
 });
 
-function loadFile(url, ok, err) {
+function loadFileXhr(url, ok) {
   var request = new XMLHttpRequest();
-  request.overrideMimeType('text/plain');
-  request.open('GET', url + (/\?/.test(url) ? '&' : '?') + new Date().getTime(), true);
-  request.addEventListener(
-      'load',
-      function (event) {
-          var response = event.target.response;
-          if (this.status === 200) {
-              if (ok) {
-                  ok(response);
-              }
-          } else if (this.status === 0) {
-              // Some browsers return HTTP Status 0 when using non-http protocol
-              // e.g. 'file://' or 'data://'. Handle as success.
-              console.warn('loadFile: HTTP Status 0 received.');
-              if (ok) {
-                  ok(response);
-              }
-          } else {
-              if (err) {
-                  err(event);
-              }
-          }
-      },
-      false
-  );
-
-  request.addEventListener(
-      'error',
-      function (event) {
-          if (err) {
-              err(event);
-          }
-      },
-      false
-  );
+  
+  request.open('GET', url, true);
+  request.onreadystatechange = function() {
+    if (request.readyState == 4 && request.status == 200) {
+      ok(request.responseText)
+    }
+  }
   request.send(null);
 }
 
-async function loadFileFetch(url, ok) {
-  const response = await fetch(url);
-  const content = await response.text();
-  ok(content);
+function loadFileFetch(url, ok) {
+  fetch(url)
+  .then(response => response.text())
+  .then(text => {
+    ok(text);
+  });
 }
