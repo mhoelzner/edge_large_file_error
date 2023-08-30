@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", function(event) {
   loadFile('./largefile.txt', function(text) {
     console.log(text.length);
-  } )
+  } );
+  loadFileFetch('./largeFile.txt', function(text) {
+    console.log(text.length);
+  });
 });
 
 function loadFile(url, ok, err) {
@@ -42,4 +45,10 @@ function loadFile(url, ok, err) {
       false
   );
   request.send(null);
+}
+
+async function loadFileFetch(url, ok) {
+  const response = await fetch(url);
+  const content = await response.text();
+  ok(content);
 }
