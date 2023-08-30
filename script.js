@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", function(event) {
   loadFile('./largefile.txt', function(text) {
     console.log(text.length);
+    document.writeln(text.length);
   } );
   loadFileFetch('./largeFile.txt', function(text) {
     console.log(text.length);
+    document.writeln(text.length);
   });
 });
 
