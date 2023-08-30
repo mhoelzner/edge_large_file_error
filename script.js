@@ -1,12 +1,26 @@
 document.addEventListener("DOMContentLoaded", function(event) {
+
+  var large = document.querySelector("#largeFileContent");
+  var small = document.querySelector("#smallFileContent");
+
   loadFileXhr('./largefile.txt', function(text) {
     console.log(text.length);
-    document.body.innerHTML += '<p>' + text.length + '</p>';
+    large.innerHTML += '<p>' + text.length + '</p>';
   } );
-  loadFileFetch('./largeFile.txt', function(text) {
+  loadFileFetch('./largefile.txt', function(text) {
     console.log(text.length);
-    document.body.innerHTML += '<p>' + text.length + '</p>';
+    large.innerHTML += '<p>' + text.length + '</p>';
   });
+
+  loadFileXhr('./smallfile.txt', function(text) {
+    console.log(text.length);
+    small.innerHTML += '<p>' + text.length + '</p>';
+  } );
+  loadFileFetch('./smallfile.txt', function(text) {
+    console.log(text.length);
+    small.innerHTML += '<p>' + text.length + '</p>';
+  });
+
 });
 
 function loadFileXhr(url, ok) {
